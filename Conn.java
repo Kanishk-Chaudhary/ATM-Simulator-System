@@ -6,18 +6,12 @@ public class Conn {
 
     public Conn() {
         try {
-            String url = System.getenv("DB_URL");
-            String user = System.getenv("DB_USER");
-            String password = System.getenv("DB_PASSWORD");
-
-            c = DriverManager.getConnection(url, user, password);
+            // Class.forName(com.mysql.cj.jdbc.Driver);
+            c = DriverManager.getConnection("jdbc:mysql:///KMB", "root", "Kanix@8191");
             s = c.createStatement();
+            System.out.println("Database connection established successfully!");
         } catch (Exception e) {
-            System.out.println("Error establishing database connection: " + e);
+            System.out.println(e);
         }
-    }
-
-    public static void main(String[] args) {
-        Conn conn = new Conn(); // Instantiating Conn object
     }
 }
