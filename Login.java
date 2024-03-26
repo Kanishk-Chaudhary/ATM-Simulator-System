@@ -1,6 +1,7 @@
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import java.awt.Color;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
+import java.sql.*;
 
 public class Login extends JFrame implements ActionListener {
 
@@ -83,6 +85,21 @@ public class Login extends JFrame implements ActionListener {
             cardTextField.setText("");
             pinTextField.setText("");
         } else if (ae.getSource() == login) {
+            Conn conn = new Conn();
+            String c_number = cardTextField.getText();
+            String p_number = pinTextField.getText();
+            String query = "select * from login where c_number = '" + c_number + "' and p_number = '" + p_number + "'";
+            try {
+                ResultSet rs = conn.s.executeQuery(query);
+                if (rs.next()) {
+                    setVisible(false);
+                    new Transitions(p_number).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Enter correct Card Number and PIN");
+                }
+            } catch (Exception e) {
+                System.out.print(e);
+            }
         } else if (ae.getSource() == signup) {
             setVisible(false);
             new Signup().setVisible(true);
