@@ -87,13 +87,13 @@ public class Login extends JFrame implements ActionListener {
         } else if (ae.getSource() == login) {
             Conn conn = new Conn();
             String c_number = cardTextField.getText();
-            String p_number = pinTextField.getText();
+            String p_number = String.valueOf(pinTextField.getPassword());
             String query = "select * from login where c_number = '" + c_number + "' and p_number = '" + p_number + "'";
             try {
                 ResultSet rs = conn.s.executeQuery(query);
                 if (rs.next()) {
                     setVisible(false);
-                    new Transitions(p_number).setVisible(true);
+                    new atm(p_number).setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "Enter correct Card Number and PIN");
                 }

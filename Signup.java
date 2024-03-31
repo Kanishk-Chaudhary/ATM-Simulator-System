@@ -6,7 +6,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.util.*;
@@ -147,6 +146,16 @@ public class Signup extends JFrame implements ActionListener {
         try {
             if (fullname.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Name is Required");
+            } else if (gender.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Gender is Required");
+            } else if (email.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Email is Required");
+            } else if (phonno.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Phone Number is Required");
+            } else if (address.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Address is Required");
+            } else if (pincode.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Pin  Code is Required");
             } else {
                 Conn c = new Conn();
                 String query = "insert into signup values('" + formno + "', '" + fullname + "', '" + dob + "', '"

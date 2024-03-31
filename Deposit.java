@@ -1,9 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
-public class Deposit extends JFrame {
+public class Deposit extends JFrame implements ActionListener {
 
-    Deposit() {
+    JTextField amount;
+    JButton deposit, exit, back;
+    String p_number;
+
+    Deposit(String p_number) {
+        this.p_number = p_number;
 
         setLayout(null);
 
@@ -14,15 +21,68 @@ public class Deposit extends JFrame {
         image.setBounds(0, 0, 900, 900);
         add(image);
 
-        JLabel info = new JLabel("Enter you deposit money: ");
+        JLabel info = new JLabel("Enter your amount to deposit");
+        info.setForeground(Color.WHITE);
+        info.setFont(new Font("System", Font.BOLD, 16));
+        info.setBounds(170, 300, 400, 20);
+        image.add(info);
+
+        amount = new JTextField();
+        amount.setFont(new Font("System", Font.BOLD, 16));
+        amount.setBounds(170, 350, 335, 25);
+        image.add(amount);
+
+        deposit = new JButton("Deposit");
+        deposit.setBackground(Color.GREEN);
+        deposit.setBounds(410, 420, 100, 30);
+        deposit.addActionListener(this);
+        image.add(deposit);
+
+        back = new JButton("Back");
+        back.setBounds(410, 455, 100, 30);
+        back.addActionListener(this);
+        image.add(back);
+
+        exit = new JButton("Exit");
+        exit.setBackground(Color.RED);
+        exit.setBounds(410, 490, 100, 30);
+        exit.addActionListener(this);
+        image.add(exit);
 
         setSize(900, 900);
         setLocation(300, 0);
         setVisible(true);
     }
 
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == deposit) {
+            String strAmount = amount.getText();
+            Date date = new Date();
+            if (strAmount.equals("")) {
+                JOptionPane.showMessageDialog(null, "Please enter the amount");
+            } else {
+                try {
+                    Conn conn = new Conn();
+                    String query = "insert into bank values('" + p_number + "','" + date + "','Deposit','" + strAmount
+                            + "')";
+                    conn.s.executeUpdate(query);
+                    JOptionPane.showMessageDialog(null, "Rs" + strAmount + " Deposit Successfully");
+                    setVisible(false);
+                    new atm(p_number).setVisible(true);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        } else if (ae.getSource() == back) {
+            setVisible(false);
+            new atm(p_number).setVisible(true);
+        } else if (ae.getSource() == exit) {
+            System.exit(0);
+        }
+    }
+
     public static void main(String[] args) {
-        new Deposit();
+        new Deposit("");
     }
 
 }

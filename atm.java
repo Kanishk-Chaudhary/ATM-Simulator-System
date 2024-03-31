@@ -2,12 +2,12 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Transitions extends JFrame implements ActionListener {
+public class atm extends JFrame implements ActionListener {
 
     JButton deposit, withdrawl, p_change, ministatement, balanceenquiry, fastcash, exit;
     String p_number;
 
-    Transitions(String p_number) {
+    atm(String p_number) {
         this.p_number = p_number;
 
         ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("assets/atm.jpg"));
@@ -60,7 +60,7 @@ public class Transitions extends JFrame implements ActionListener {
 
         setSize(900, 900);
         setLocation(300, 0);
-        setUndecorated(true);
+        // setUndecorated(true);
         setVisible(true);
 
     }
@@ -68,11 +68,14 @@ public class Transitions extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == exit) {
             System.exit(0);
+        } else if (ae.getSource() == deposit) {
+            setVisible(false);
+            new Deposit(p_number).setVisible(true);
         }
     }
 
     public static void main(String args[]) {
-        new Transitions("");
+        new atm("");
     }
 
 }
