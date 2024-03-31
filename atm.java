@@ -71,6 +71,9 @@ public class atm extends JFrame implements ActionListener {
         } else if (ae.getSource() == deposit) {
             setVisible(false);
             new Deposit(p_number).setVisible(true);
+        } else if (ae.getSource() == withdrawl) {
+            setVisible(false);
+            new Withdrawl(p_number).setVisible(true);
         }
     }
 
