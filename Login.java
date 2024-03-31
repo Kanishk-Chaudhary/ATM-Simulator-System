@@ -88,9 +88,12 @@ public class Login extends JFrame implements ActionListener {
             Conn conn = new Conn();
             String c_number = cardTextField.getText();
             String p_number = String.valueOf(pinTextField.getPassword());
-            String query = "select * from login where c_number = '" + c_number + "' and p_number = '" + p_number + "'";
+            String query = "select * from login where c_number = ? and p_number = ?";
             try {
-                ResultSet rs = conn.s.executeQuery(query);
+                PreparedStatement statement = conn.getConnection().prepareStatement(query);
+                statement.setString(1, c_number);
+                statement.setString(2, p_number);
+                ResultSet rs = statement.executeQuery();
                 if (rs.next()) {
                     setVisible(false);
                     new atm(p_number).setVisible(true);

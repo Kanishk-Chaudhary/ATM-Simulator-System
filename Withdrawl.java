@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.PreparedStatement;
 import java.util.*;
 
 public class Withdrawl extends JFrame implements ActionListener {
@@ -63,10 +64,14 @@ public class Withdrawl extends JFrame implements ActionListener {
             } else {
                 try {
                     Conn conn = new Conn();
-                    String query = "insert into bank values('" + p_number + "','" + date + "','Withdrawl','" + strAmount
-                            + "')";
-                    conn.s.executeUpdate(query);
-                    JOptionPane.showMessageDialog(null, "Rs" + strAmount + " Withdrawl Successfully");
+                    String query = "INSERT INTO bank VALUES (?, ?, ?, ?)";
+                    PreparedStatement ps = conn.getConnection().prepareStatement(query);
+                    ps.setString(1, p_number);
+                    ps.setDate(2, new java.sql.Date(date.getTime()));
+                    ps.setString(3, "Withdrawal");
+                    ps.setString(4, strAmount);
+                    ps.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Rs" + strAmount + " Withdrawal Successfully");
                     setVisible(false);
                     new atm(p_number).setVisible(true);
                 } catch (Exception e) {

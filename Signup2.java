@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
+import java.sql.PreparedStatement;
 
 public class Signup2 extends JFrame implements ActionListener {
 
@@ -139,6 +140,9 @@ public class Signup2 extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
+        String formno = ""; // Initialize formno variable
+        // Assuming formno is initialized somewhere in the class
+
         String religion = religionTextField.getText();
         String income = (String) vincome.getSelectedItem();
         String education = null;
@@ -165,11 +169,21 @@ public class Signup2 extends JFrame implements ActionListener {
         }
         try {
             Conn c = new Conn();
-            String query = "insert into signup2 values('" + formno + "', '" + religion + "', '" + income + "', '"
-                    + education + "', '" + pan + "','" + aadhar + "', '" + account + "', '" + citizen + "')";
-            c.s.executeUpdate(query);
+            String query = "insert into signup2 values(?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = c.getConnection().prepareStatement(query);
+            ps.setString(1, formno);
+            ps.setString(2, religion);
+            ps.setString(3, income);
+            ps.setString(4, education);
+            ps.setString(5, pan);
+            ps.setString(6, aadhar);
+            ps.setString(7, account);
+            ps.setString(8, citizen);
+            ps.executeUpdate();
+
             setVisible(false);
             new Signup3(formno).setVisible(true);
+            c.closeConnection(); // Close the connection after use
         } catch (Exception e) {
             System.out.println(e);
         }

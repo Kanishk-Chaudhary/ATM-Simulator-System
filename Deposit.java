@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+import java.sql.PreparedStatement;
 
 public class Deposit extends JFrame implements ActionListener {
 
@@ -57,15 +57,19 @@ public class Deposit extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == deposit) {
             String strAmount = amount.getText();
-            Date date = new Date();
             if (strAmount.equals("")) {
                 JOptionPane.showMessageDialog(null, "Please enter the amount");
             } else {
                 try {
                     Conn conn = new Conn();
-                    String query = "insert into bank values('" + p_number + "','" + date + "','Deposit','" + strAmount
-                            + "')";
-                    conn.s.executeUpdate(query);
+                    String query = "insert into bank values(?, ?, ?, ?)";
+                    PreparedStatement ps = conn.getConnection().prepareStatement(query);
+                    ps.setString(1, p_number);
+                    ps.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+                    ps.setString(3, "Deposit");
+                    ps.setString(4, strAmount);
+                    ps.executeUpdate();
+
                     JOptionPane.showMessageDialog(null, "Rs" + strAmount + " Deposit Successfully");
                     setVisible(false);
                     new atm(p_number).setVisible(true);

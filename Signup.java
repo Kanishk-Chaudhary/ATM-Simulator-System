@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.util.*;
 import com.toedter.calendar.JDateChooser;
 import java.awt.event.*;
+import java.sql.PreparedStatement;
 
 public class Signup extends JFrame implements ActionListener {
     long random;
@@ -127,7 +128,8 @@ public class Signup extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
-        String formno = "" + random;
+        Random random = new Random();
+        String formno = "" + random.nextLong();
         String fullname = fullnameTextField.getText();
         String dob = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
         String gender = null;
@@ -146,7 +148,7 @@ public class Signup extends JFrame implements ActionListener {
         try {
             if (fullname.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Name is Required");
-            } else if (gender.isEmpty()) {
+            } else if (gender == null) {
                 JOptionPane.showMessageDialog(null, "Gender is Required");
             } else if (email.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Email is Required");
@@ -158,12 +160,21 @@ public class Signup extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Pin  Code is Required");
             } else {
                 Conn c = new Conn();
-                String query = "insert into signup values('" + formno + "', '" + fullname + "', '" + dob + "', '"
-                        + gender + "', '" + email + "','" + phonno + "', '" + address + "', '" + pincode + "')";
-                c.s.executeUpdate(query);
+                String query = "insert into signup values(?, ?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps = c.getConnection().prepareStatement(query);
+                ps.setString(1, formno);
+                ps.setString(2, fullname);
+                ps.setString(3, dob);
+                ps.setString(4, gender);
+                ps.setString(5, email);
+                ps.setString(6, phonno);
+                ps.setString(7, address);
+                ps.setString(8, pincode);
+                ps.executeUpdate();
 
                 setVisible(false);
                 new Signup2(formno).setVisible(true);
+                c.closeConnection(); // Close the connection after use
             }
         } catch (Exception e) {
             System.out.println(e);

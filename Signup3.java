@@ -9,6 +9,7 @@ import javax.swing.JRadioButton;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
+import java.sql.PreparedStatement;
 import java.util.Random;
 
 public class Signup3 extends JFrame implements ActionListener {
@@ -195,17 +196,26 @@ public class Signup3 extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Account Type is Required");
                 } else {
                     Conn conn = new Conn();
-                    String query1 = "insert into signup3 values( '" + formno + "','" + a_type_group + "','" + c_number
-                            + "','" + p_number + "','" + services + "')";
-                    String query2 = "insert into login values( '" + formno + "','" + c_number
-                            + "','" + p_number + "')";
-                    conn.s.executeUpdate(query1);
-                    conn.s.executeUpdate(query2);
+                    String query1 = "insert into signup3 values(?, ?, ?, ?, ?)";
+                    PreparedStatement ps1 = conn.getConnection().prepareStatement(query1);
+                    ps1.setString(1, formno);
+                    ps1.setString(2, a_type_group);
+                    ps1.setString(3, c_number);
+                    ps1.setString(4, p_number);
+                    ps1.setString(5, services);
+                    ps1.executeUpdate();
+
+                    String query2 = "insert into login values(?, ?, ?)";
+                    PreparedStatement ps2 = conn.getConnection().prepareStatement(query2);
+                    ps2.setString(1, formno);
+                    ps2.setString(2, c_number);
+                    ps2.setString(3, p_number);
+                    ps2.executeUpdate();
 
                     JOptionPane.showMessageDialog(null, "Card Number: " + c_number + "\n Pin Number: " + p_number);
+                    setVisible(false);
+                    new Deposit(p_number).setVisible(true);
                 }
-                setVisible(false);
-                new Deposit(p_number).setVisible(false);
             } catch (Exception e) {
                 System.out.println(e);
             }
