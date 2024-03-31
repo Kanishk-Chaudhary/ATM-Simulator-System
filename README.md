@@ -26,10 +26,6 @@ The ATM Simulator System is a Java-based project aimed at providing a simulated 
 2. Open the project in your preferred Java IDE.
 3. Compile and run the main file to start the ATM Simulator System.
 
-## Contributors
-
-- [Your Name](link to your GitHub profile) - Developer
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
